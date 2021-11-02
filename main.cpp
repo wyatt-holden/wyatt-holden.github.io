@@ -1,111 +1,138 @@
 #include <iostream>
-#include "directories.h"
-#include <fstream>
+#include "carton.h"
 #include <array>
+#include <fstream>
+
 using namespace std;
 
 int main() {
+  // Create a constant int that will specify the size of the arrays
+  // in this program. Set it to 20.
+  const int kArraySize = 20;
 
-    // Part 1 - Phone Number Correction
-    std::cout << "-------------------- Phone Number ---------------\n";
-    FixPhoneNumber("654.9873");
-    FixPhoneNumber("325.654.9873");
-    FixPhoneNumber("654-9873");
-    FixPhoneNumber("325-654-9873");
-    FixPhoneNumber("(325)654-9873");
-    FixPhoneNumber("6549873");
-    FixPhoneNumber("3256549873");
+  // Write the value of the constant to cout.
+  cout << "\nConstant to specify size of array: \n" << kArraySize;
 
-    // Part 2 - Name Correction
-    std::cout << "-------------------- Name -----------------------\n";
-    FixName("Baggins, Bilbo");
-    FixName("Bilbo Baggins");
-    FixName("Baggins, Bilbo B.");
-    FixName("Bilbo B. Baggins");
-    FixName("Bilbo Baxby Buttons Baggins");
-    FixName("Baggins, Bilbo Baxby Buttons");
+  // Create a Carton object using the default constructor.
+    Carton DefaultConstructor = Carton();
 
-    // Part 3 - Email Correction
-    std::cout << "------------------------ Email ------------------\n";
-    FixEmail("baggins@gmail.com");
-    FixEmail("baggins@gmail");
-    FixEmail("baggins");
-    FixEmail("baggins@yahoo");
-    FixEmail("baggins@yahoo.com");
-    FixEmail("baggins.bill");
-    FixEmail("baggins.bill@gmail");
+  // Use the getters to write the length, width, and height of
+  // the Carton to cout.
+  cout << "\nFirst Carton information:\n"
+  << "Length: " << DefaultConstructor.GetLength() << endl
+  << "Width: " << DefaultConstructor.GetWidth() << endl
+  << "Height: " << DefaultConstructor.GetHeight() << endl;
 
-    // Part 4 - Formatting and compiling data for each person
-    std::cout << "---------------------- Phone, Name & Email ------\n";
-    WriteFormatted("234.543.6543","Will Powers",
-                   "collins297@gmail.com", std::cout);
-    WriteFormatted("543.6543","Will Powers",
-                   "big@gone.com", std::cout);
-    WriteFormatted("234.543.6543","Will Jonathan Scott Powers",
-                   "big@gone.com", std::cout);
+  // Create a Carton object using the non-default constructor.
+  Carton Constructor = Carton(1, 2, 3);
 
-    //Part 5 - Reading and writing data to a file
-    std::cout << "Hello, please enter 2 files you would"
-                 " like to open" << std::endl;
+  // Use the getters to write the length, width, and height of
+  // the Carton to cout.
+  cout << "\nSecond Carton information:\n"
+  << "Length: " << Constructor.GetLength() << endl
+  << "Width: " << Constructor.GetWidth() << endl
+  << "Height: " << Constructor.GetHeight() << endl;
 
-    std::string FirstFile;
-    std::cout << "First File" << std::endl;
-    std::cin  >> FirstFile;
-    // "ifstream" is from the fstream class. Its purpose is to create a type
-    // of object that has input already stored within a file.
-    // the concatenated argument after "In" (the object) opens a file.
-    // "../../" I premade this string to move up within the directory 2 times.
-    ifstream In("../../" + FirstFile);
+  // Create an array of Cartons. Use the constant defined earlier for the
+  // size of the array.
+  array <Carton, kArraySize> CartonsArray;
 
-    while (In.is_open())
-        {
-        // ".rdbuf" reads a file in a pretty format.(Ususally the exact way it
-        // is formatted within the file)
-        std::cout << In.rdbuf() << endl;
-        break;
-        }
-    if (In.fail())
-        {
-        std::cout << "Sorry, the first file you entered does"
-                     " not exist. Please run the program again.";
-        return 1;
-        }
-    In.close();
+  // Update the first three elements of the array by adding Carton objects
+  // created with the non-default constructor.
+  CartonsArray[0] = Carton(4,5,6);
+  CartonsArray[1] = Carton(7, 8, 9);
+  CartonsArray[2] = Carton(10, 11, 12);
 
-    std::string SecondFile;
-    std::cout << "Second File" << std::endl;
-    std::cin >> SecondFile;
-    ifstream SecondIn("../../" + SecondFile);
+  // Loop through the first three elements in the array, use the getters
+  // to write the length, width, and height of the Cartons.
+  cout << "\nDetails of three Cartons in an array:\n";
+  for (int i = 0; i < 3; i++)
+  {
+      cout << CartonsArray[i].GetLength() << endl;
+      cout << CartonsArray[i].GetWidth() << endl;
+      cout << CartonsArray[i].GetHeight() << endl;
+  }
 
-    if(SecondIn.is_open())
-        {
-        std::cout << SecondIn.rdbuf() << endl;
-        }
-    if (SecondIn.fail())
-        {
-        std::cout << "Sorry, the second file you entered does"
-                     " not exist. Please Try again.";
-        return 1;
-        }
-    SecondIn.close();
+  // Use the WriteData method to print the data of the two Cartons you
+  // have created to cout.
+  cout << "\nData of two Cartons:\n";
+    DefaultConstructor.WriteData(cout);
+    Constructor.WriteData(cout);
 
-    std::cout << "Type in a name of a new file. We will write data to the file.\n";
-    std::string OutputFile;
-    cin >> OutputFile;
-    // "ofstream" is form the "fstream" class. It creates a type for a file
-    // to be written to. similar to "ifstream" but to write to a file.
-    ofstream Out("../../" + OutputFile);
+  // Use the WriteCarton method to print sentences about the two Cartons you
+  // have created to cout.
+  cout << "\nReport of two Cartons:\n";
+    DefaultConstructor.WriteCarton(cout);
+    std::cout << std::endl;
+    Constructor.WriteCarton(cout);
 
-    if (Out.is_open())
-        {
-            WriteFormatted("234.543.6543","Will Powers",
-                           "collins297@gmail.com", Out);
-            WriteFormatted("543.6543","Will Powers",
-                           "big@gone.com", Out);
-            WriteFormatted("234.543.6543","Will Jonathan Scott Powers",
-                           "big@gone.com", Out);
-        }
+  // Loop through the first three elements in the array and write carton data
+  // and information using the WriteData and WriteCarton methods.
+  // Notice the WriteData method adds an endl and the WriteCarton does not.
+  // Add an endl after calling the WriteCarton method.
+  cout << "\nReport and data of three Cartons in an array:\n";
+  for (int i = 0; i < 3; i++)
+  {
+      CartonsArray[i].WriteData(cout);
+      CartonsArray[i].WriteCarton(cout);
+      cout << endl;
+  }
+
+  // Print out the volume of two Cartons you have created to cout.
+  cout << "\nVolumes of two Cartons:\n";
+    cout << DefaultConstructor.Volume() << endl;
+    cout << Constructor.Volume();
+
+  // Loop through the first three elements in the array and print out
+  // the volume of the Cartons in the array.
+  cout << "\nVolumes of the first three Cartons in the array:\n";
+  for (int i = 0; i < 3; i++)
+  {
+      cout << CartonsArray[i].Volume() << ' ';
+  }
+
+  // Create another array of Cartons. Use the constant defined earlier for the
+  // size of the array.
+  array <Carton, kArraySize> CartonsArray2;
+
+  // Define and open an ifstream object. Test that the ifstream opens.
+  // Then read the data from file named
+  // cartons.txt and store them in this array.
+  ifstream In("../../cartons.txt");
+  float length, width, height;
+  int index = 0;
+  while (In >> length)
+  {
+      In >> width;
+      In >> height;
+      CartonsArray2[index] = Carton(length, width, height);
+      index++;
+  }
+
+  // Write the Carton data to file named carton_data.txt. First, define and
+  // open an ofstream object using that filename. Then loop through the
+  // array from Part 7 and use WriteData to write the data for
+  // each Carton. Put each Carton on a single line. Do not include blank lines.
+  // Include all the valid Cartons in the array and none of the default Cartons.
+    ofstream Out("cartons_data.txt");;
+    for(int i = 0; i < index; i++)
+    {
+        CartonsArray2[i].WriteData(Out);
+    }
     Out.close();
 
-    return 0;
+  // Write a Carton report to file named carton_report.txt. First, define and
+  // open an ofstream object using that filename. Then loop through the
+  // array from Part 7 and use WriteCarton to write a sentence for
+  // each Carton. Put each Carton on a single line. Include all the valid
+  // Cartons in the array and none of the default Cartons.
+    ofstream Out2("cartons_report.txt");;
+    for(int i = 0; i < index; i++)
+    {
+        CartonsArray2[i].WriteCarton(Out2);
+        cout << endl;
+    }
+    Out2.close();
+    In.close();
+  return 0;
 }
